@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1RM Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button#reset {
+      background-color: #f44336;
+    }
+
+    .result-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .percentages {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 10px;
+    }
+
+    .percentages > div {
+      background-color: #f2f2f2;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .percentages .percentage-value {
+      float: right;
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>1RM Calculator <br>SMSU - Exercise Science</h1>
+    <div class="form-group">
+      <label for="weight">Weight Lifted (lbs):</label>
+      <input type="number" id="weight" min="0" step="0.1">
+    </div>
+    <div class="form-group">
+      <label for="reps">Reps Performed:</label>
+      <input type="number" id="reps" min="1" max="20" step="1">
+    </div>
+    <div class="form-group">
+      <button id="calculate">Calculate</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div class="result-container">
+      <h2>Calculated 1RM:</h2>
+      <div class="result"></div>
+      <h2>Percentages:</h2>
+      <div class="percentages">
+        <div>50% 1RM <span class="percentage-value percentage-50"></span></div>
+        <div>55% 1RM <span class="percentage-value percentage-55"></span></div>
+        <div>60% 1RM <span class="percentage-value percentage-60"></span></div>
+        <div>65% 1RM <span class="percentage-value percentage-65"></span></div>
+        <div>70% 1RM <span class="percentage-value percentage-70"></span></div>
+        <div>75% 1RM <span class="percentage-value percentage-75"></span></div>
+        <div>80% 1RM <span class="percentage-value percentage-80"></span></div>
+        <div>85% 1RM <span class="percentage-value percentage-85"></span></div>
+        <div>90% 1RM <span class="percentage-value percentage-90"></span></div>
+        <div>95% 1RM <span class="percentage-value percentage-95"></span></div>
+      </div>
+      <br>
+      Brzycki formula: 1RM = W / (1.0278 - 0.0278 × R) 
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('calculate').addEventListener('click', () => {
+      const weightLifted = parseFloat(document.getElementById('weight').value);
+      const repsPerformed = parseInt(document.getElementById('reps').value);
+
+      if (isNaN(weightLifted) || isNaN(repsPerformed) || repsPerformed < 1 || repsPerformed > 20) {
+        alert('Please enter valid values for weight and reps.');
+        return;
+      }
+
+      const oneRepMax = weightLifted / (1.0278 - 0.0278 * repsPerformed);
+      document.querySelector('.result').textContent = oneRepMax.toFixed(2) + ' lbs';
+
+      // Calculate and display the percentages
+      const percentages = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95];
+      percentages.forEach(percentage => {
+        const value = (oneRepMax * (percentage / 100)).toFixed(2);
+        document.querySelector(`.percentage-${percentage}`).textContent = value + ' lbs';
+      });
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      document.getElementById('weight').value = '';
+      document.getElementById('reps').value = '';
+      document.querySelector('.result').textContent = '';
+      document.querySelectorAll('.percentages span').forEach(span => span.textContent = '');
+    });
+  </script>
+</body>
+</html>
